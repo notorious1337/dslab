@@ -1,3 +1,4 @@
+//prims
 #include <stdio.h>
 int a,b,u,n,i,j,ne=1,v;
 int visited[10],min,mincost=0,cost[10][10];

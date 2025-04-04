@@ -1,3 +1,4 @@
+//kruskals
 #include<stdio.h>
 void main()
 {

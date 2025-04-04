@@ -1,124 +1,40 @@
+#include<stdio.h>
 #include<stdlib.h>
-#include<stdio.h>	
-#include<string.h>
-#define max_size 5
- 
-int stack[max_size],top = -1,item; 
-void push();
-void pop(); 
-void display(); 
-void pali();
+#include<time.h>
+#define MAX 300000
+int n;
 int main()
 {
-	int choice=1;
-	while(choice)
-	{
-		printf("\n\n--------STACK OPERATIONS-----------\n");
-		printf("1.Push\n");
-		printf("2.Pop\n");
-		printf("3.Palindrome\n");
-		printf("4.Display\n");
-		printf("5.Exit\n");
-		printf("-----------------------");
-		printf("\nEnter your choice:\t"); 
-		scanf("%d",&choice); 
-		switch(choice)
-		{
-			case 1:
-				push();
-				break; 
-			case 2:
-				pop();
-				break; 
-			case 3:
-				pali();
-				break;
-			case 4: 
-				display(); 
-				break; 
-			case 5: 
-				exit(0); 
-				break; 
-			default:
-				printf("\nInvalid choice:\n"); 
-				break;
-		}	
-	}
-	return 0;
-}
- 
-void push()       //Inserting element into the stack
+int a[MAX];
+double startTime,endTime;
+int i,j,temp,min;
+printf("Enter the number of elements to sort\n");
+scanf("%d",&n);
+//To generate numbers randomly and store in array
+for(i=0;i<n;i++)
+a[i]=rand(); //rand() function to generate n random numbers
+printf("\nBefore Sorting:\n");
+for(i=0;i<n;i++)
+printf("%d\t",a[i]);
+printf("\n");
+startTime=clock();
+for(i=0;i<=n-2;i++)
 {
- 
-	if(top==(max_size-1))
-	{
-		printf("\nStack Overflow:");
-	}
-	else
-	{
-		printf("Enter the element to be inserted:\t"); 
-		scanf("%d",&item);
-		top=top+1;
-		stack[top]=item;
-	}
- 
-}
- 
-void pop()         //deleting an element from the stack
+min=i;
+for(j=i+1;j<=n-1;j++)
 {
- 
-	if(top==-1)
-	{
-		printf("Stack Underflow:");
-	}
-	else
-	{
-		item=stack[top]; 
-		top=top-1;
-		printf("\nThe poped element: %d\t",item);
-	}
- 
+if(a[j]<a[min])
+min=j;
 }
-void pali()
-{
-	int num=0,temp,digit,revnum=0,k=0;
-    if(top==-1)
-    {
-        printf("Stack is empty\n");
-        return;
-    }
-    else
-    {
- 
-        while(top!=-1)
-        {
-            pop();
-            num=num*10+item;
-            revnum=item*pow(10,k)+revnum;
-            k=k+1;
-        }
-        printf("\nReverse Number of %d is is: %d\n",num, revnum);
-        if(num == revnum)
-        printf("The stack contains a Palindrome number\n");
-        else
-        printf("The stack does not contain a Palindrome number\n");
-    }
+temp=a[min];
+a[min]=a[i];
+a[i]=temp;
 }
-void display()
-{
-	int i;  
-	if(top==-1)
-	{
-		printf("\nStack is Empty:");
-	}
-	else
-	{
-		printf("\nThe stack elements are:\n" );
-		for(i=top;i>=0;i--)
-		{
-			printf("%d\n",stack[i]);
-		}
- 
-	}
- 
+endTime = clock();
+printf("After Sorting:\n");
+for(i=0;i<n;i++)
+printf("%d\t",a[i]);
+printf("\n");
+printf("Time taken is %10.9f\n",(double)(endTime-startTime));
+return 0;
 }

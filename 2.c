@@ -1,61 +1,79 @@
 #include<stdio.h>
-#include<string.h>
- 
-char STR[100], PAT[100], REP[100], ans[100];
-int i, j, c, m, k, flag = 0;
- 
-void read();
-void replace();
-void print();
- 
-int main() {
-    read();
-    replace();
-    print();
-    return 0;
+#include<time.h>
+#include<stdlib.h>
+#define MAX 500000
+int partition(int a[],int low,int high);
+int swap(int *a,int *b)
+{
+	int temp;
+	temp=*a;
+	*a=*b;
+	*b=temp;
+	return temp;
 }
- 
-void read() {
-    printf("Enter the MAIN string: \n");
-    fgets(STR, sizeof(STR), stdin);
-    STR[strcspn(STR, "\n")] = '\0';  // Remove trailing newline
- 
-    printf("Enter a PATTERN string: \n");
-    fgets(PAT, sizeof(PAT), stdin);
-    PAT[strcspn(PAT, "\n")] = '\0';
- 
-    printf("Enter a REPLACE string: \n");
-    fgets(REP, sizeof(REP), stdin);
-    REP[strcspn(REP, "\n")] = '\0';
+
+void quicksort(int a[],int low,int high)
+{
+	int s;
+	if(low<high)
+	{
+		s=partition(a,low,high);
+		quicksort(a,low,s-1);
+		quicksort(a,s+1,high);
+	}
 }
- 
-void replace() {
-    i = m = c = j = 0;
-    while (STR[c] != '\0') {
-        if (STR[m] == PAT[i]) {
-            i++;
-            m++;
-            if (PAT[i] == '\0') {
-                // Copy replacement string into ans
-                for (k = 0; REP[k] != '\0'; k++, j++) {
-                    ans[j] = REP[k];
-                }
-                flag = 1;
-                i = 0;
-                c = m;
-            }
-        } else {
-            ans[j++] = STR[c++];
-            m = c;
-            i = 0;
-        }
-    }
-    ans[j] = '\0';  // Null-terminate the resultant string
+
+
+int partition(int a[],int low,int high)
+{
+	int  i,j,pivot;
+	pivot=a[low];
+	i=low+1;
+	j=high;
+	while(1)
+	{
+		while((i<high)&&(pivot>=a[i]))
+		i++;
+		while(pivot<a[j])
+		j--;
+		if(i<j)
+		{
+			swap(&a[i],&a[j]);
+		}
+		else
+		{
+			swap(&a[low],&a[j]);
+				       return j;
+		}
+	}
 }
- 
-void print() {
-    if (flag == 0)
-        printf("Pattern not found!!!\n");
-    else
-        printf("\nThe RESULTANT string is:\n%s\n", ans);
+
+
+void main()
+{
+ 	int a[MAX],n,i,low,high;
+  	clock_t start,end;
+     	float duration;
+     	printf("\n enter the number of elements to sort");
+     	scanf("%d", &n);
+     	printf("\n  elements are:\n");
+     	for(i=0;i<n;i++)
+     	{
+     		//scanf("%d",&a[i]);
+     		a[i]=random();
+		printf("Before Sorting\n");
+     		printf("%d\t",a[i]);
+     	}
+     	printf("\n");
+     	start=clock();
+     	low=0,high=n-1;
+     	quicksort(a,low,high);
+     	end=clock();
+     	duration=(end-start);
+     	printf("\n sorted array is::\n");
+     	for(i=0;i<n;i++)
+     		printf("\n\t%d",a[i]);
+     	printf("\n");
+     	printf("time taken is %f",duration);
 }
+

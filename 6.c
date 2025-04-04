@@ -1,78 +1,41 @@
 #include<stdio.h>
-#define queuesize 5
-int item,front,rear,count,q[queuesize];
-void insert_rear()
+#include<stdlib.h>
+#include<math.h>
+int main()
 {
-  if(count = = queuesize)
-  {
-    printf("queue overflow\n");
-    return;
-  }
-  rear = (rear +1) % queuesize;
-  q[rear] = item;
-  count = count + 1;
-}
- 
-void delete_front()
+int i,j,k,n,a[10][10],indeg[10],flag[10],count=0;
+printf("enter the number of vertices\n");
+scanf("%d",&n);
+printf("enter the adjacency matrix \n");
+for(i=0;i<n;i++)
+for(j=0;j<n;j++)
+scanf("%d",&a[i][j]);
+for(i=0;i<n;i++)
 {
-  int item;
-  if(count = = 0)
-  {
-    	printf("queue is empty\n");
-return;
-  }
-  item = q[front];
-  printf("\nthe item deleted is %d",item);
-  front = (front +1) % queuesize;
-  count = count - 1;
+indeg[i]=0;
+flag[i]=0;
 }
- 
- 
-void display()
+for(i=0;i<n;i++)
+for(j=0;j<n;j++)
+indeg[i]=indeg[i]+a[j][i];
+printf("topological order is \n");
+while(count<n)
 {
-  int i,f;
-  if(count = = 0)
-  {
-    	printf("queue is empty\n");
-    	return;
-  }
-  printf("the contents of the queue are\n");
-  for(i=1,f=front;i<=count;i++)
-  {
-    	printf("%d\n",q[f]);
-    	f = (f+1) % queuesize;
-  	  }
-}
-void main()
+for(k=0;k<n;k++)
 {
-  int choice;
-front=0;
-rear=-1;
-count=0;
-  clrscr( );
-  for(;;)
-  {
-    	printf("\n1:insert_rear\n2:delete_front\n");
-    	printf("3:display\n4:exit\n");
-    	printf("enter your choice\n");
-    	scanf("%d",&choice);
-    	switch(choice)
-    	{
-      		case 1: printf("enter the item to be inserted\n");
-	      		 scanf("%d",&item);
-	      		 insert_rear();
-	      		 break;
- 
-      		case 2: delete_front();
-	      		 break;
- 
-      		case 3: display();
-	      		 break;
- 
-      		case 4: exit(0);
-    	}
-  }
+if((indeg[k]==0)&&(flag[k]==0))
+{
+printf("%d->",(k+1));
+flag[k]=1;
+for(i=0;i<n;i++)
+{
+if(a[k][i]==1)
+indeg[i]--;
 }
- 
- 
- 
+}
+}
+count++;
+}
+printf("\n");
+return 0;
+}

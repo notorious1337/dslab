@@ -1,58 +1,75 @@
 #include<stdio.h>
+#include<time.h>
 #include<stdlib.h>
-#include<string.h>
-struct Day
+#include<time.h>
+#define MAX 300000
+void simple_merge(int a[],int low,int mid,int high);
+void merge_sort(int a[],int low,int high);
+int n;
+int main( )
 {
-	char *name;
-	int date;
-	char *description;
-};
-struct Day* create() // it creates calendar structure for 7 days 
-{
-	struct Day *calendar;
-	// dynamic allocation for calendar
-	calendar = (struct Day*)malloc(sizeof(struct Day)*7);
-	return calendar;
+	int a[MAX],i=0;
+	double startTime,endTime;
+	printf("Enter the number of elements to sort\n");
+	scanf("%d",&n);
+	//To generate randomly
+	for(i=0;i<n;i++)
+		a[i]=rand();
+	printf("\nBefore Sorting:\n");
+	for(i=0;i<n;i++)
+		printf("%d\t",a[i]);
+	printf("\n");
+	
+	startTime=clock();
+	merge_sort(a,0,n-1);
+	endTime = clock();
+	printf("After Sorting:\n");
+	for(i=0;i<n;i++)
+		printf("%d\t",a[i]);
+	printf("\n");
+	printf("Time taken is %10.9f\n",(double)(endTime-startTime));
+	return 0;
 }
-void read(struct Day *calendar)
+
+/*Function to sort sub arrays elements*/
+void simple_merge(int a[],int low,int mid,int high)
 {
-	// Local Variable to store string elements 
-	char name[10];
-	char description[25];
-	int i, date;
-	for(i = 0; i<7; i++)
+	int i=low,j=mid+1,k=low,c[MAX];
+	while(i<=mid && j<=high)
 	{
-		printf("Enter the day name : ");
-		scanf("%s",name);
-		calendar[i].name = (char *)malloc(strlen(name)+1); // dynamically allocated memory for day name
-		strcpy(calendar[i].name, name); // copy name from local variable to heap 
-		printf("Enter the date : ");
-		scanf("%d",&date);
-		calendar[i].date = date;
-		getchar();
-		printf("Enter description of the activity : "); 
-		scanf("%[^\n]s",description);
-		// dynamically allocate memory for activity description 
-		calendar[i].description = (char *)malloc(strlen(description)+1); 
-		strcpy(calendar[i].description, description); // copy activity from local variable to heap 
+		if(a[i]<a[j])
+		{
+			c[k]=a[i];
+			i++;
+			k++;
+		}
+		else
+		{
+			c[k]=a[j];
+			j++;
+			k++;
+		}
 	}
+	while(i<=mid)
+		c[k++]=a[i++];
+	while(j<=high)
+		c[k++]=a[j++];
+	for(i=low;i<=high;i++)
+		a[i]=c[i];
 }
-void display(struct Day *calendar)
+
+
+/*Function to divide the array list */
+void merge_sort(int a[],int low,int high)
 {
-	int i;
-	printf("\n\nYour calendar\n");
-	printf("Weekly Activity Details:\n");
-	//Display the calendar 
-	for(i = 0; i<7; i++)
+	int mid;
+	if(low<high)
 	{
-		printf("Day %d: Name: %s, Date: %d, Description: %s\n", i + 1, calendar[i].name, calendar[i].date, calendar[i].description);
+		mid=(low+high)/2;
+		{
+			merge_sort(a,low,mid);
+			merge_sort(a,mid+1,high);
+		}
+	simple_merge(a,low,mid,high);
 	}
-}
-void main()
-{
-	struct Day *calendar; // create structure variable of type pointer 
-	calendar=create(); //call create function 
-	read(calendar); // read function to read all inputs 
-	display(calendar); // Function to print calendar 
-	free(calendar); // Release the memory allocated dynamically 
 }

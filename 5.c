@@ -1,52 +1,42 @@
-//prims
-#include <stdio.h>
-int a,b,u,n,i,j,ne=1,v;
-int visited[10],min,mincost=0,cost[10][10];
+//topological
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
 int main()
 {
-printf("\n Enter the no of vertices & graph data : ");
+int i,j,k,n,a[10][10],indeg[10],flag[10],count=0;
+printf("enter the number of vertices\n");
 scanf("%d",&n);
-for(i=1;i<=n;i++)
+printf("enter the adjacency matrix \n");
+for(i=0;i<n;i++)
+for(j=0;j<n;j++)
+scanf("%d",&a[i][j]);
+for(i=0;i<n;i++)
 {
-for(j=1;j<=n;j++)
-{
-printf("\n(%d,%d):",i,j);
-scanf("%d",&cost[i][j]);
-if(cost[i]==0)
-cost[i][j]=999;
+indeg[i]=0;
+flag[i]=0;
 }
-}
-for(i=0;i<=n;i++)
-visited[i]=0;
-printf("\n The edges of spanning tree are :\n");
-visited[1]=1;
-while(ne<n)
+for(i=0;i<n;i++)
+for(j=0;j<n;j++)
+indeg[i]=indeg[i]+a[j][i];
+printf("topological order is \n");
+while(count<n)
 {
-for(i=1,min=999;i<=n;i++)
+for(k=0;k<n;k++)
 {
-for(j=1;j<=n;j++)
+if((indeg[k]==0)&&(flag[k]==0))
 {
-if(cost[i][j]<min)
+printf("%d->",(k+1));
+flag[k]=1;
+for(i=0;i<n;i++)
 {
-if(visited[i]==0)
-continue;
-else
-{
-min=cost[i][j];
-a=u=i;
-b=v=j;
+if(a[k][i]==1)
+indeg[i]--;
 }
 }
 }
+count++;
 }
-if(visited[u]==0||visited[v]==0)
-{
-printf("\n %d edge (%d,%d) = %d",ne++,a,b,min);
-mincost+=min;
-visited[b]=1;
-}
-cost[a][b]=cost[b][a]=999;
-}
-printf("\n\n\n Minimum cost : %d",mincost);
+printf("\n");
 return 0;
 }

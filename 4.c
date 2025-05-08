@@ -1,42 +1,43 @@
-//kruskals
 #include<stdio.h>
-void main()
+int n,cost[10][10],dist[10];
+int min(int a,int b);
+void read_mat(int n)
 {
-int 
-n,v,u,cost[10][10],parent[10]={0},i,j;
-int count=1,mincost=0,min,a,b;
-printf("\n enter no of vertices");
-scanf("%d",&n);
-printf("\n enter cost matrix");
-for(i=1;i<=n;i++)
-for(j=1;j<=n;j++)
+	int i,j;
+	for(i=1;i<=n;i++)
+		for(j=1;j<=n;j++)
+		{
+			printf("(%d,%d)",i,j);
+			scanf("%d",&cost[i][j]);
+		}
+}
+
+void shortestpath(int n,int s)
 {
-scanf("%d",&cost[i][j]);
-if(cost[i][j]==0)
-cost[i][j]=999;
+	int vis[10],c,u,i,k;
+	for(i=1;i<=n;i++)
+	{
+		vis[i]=0;
+		dist[i]=cost[s][i];
+	}
+	dist[s]=0;
+	vis[s]=1;
+	for(k=1;k<=n;k++)
+	{
+		c=999;
+		for(i=1;i<=n;i++)
+		if(vis[i]==0)
+		{
+			if(dist[i]<=c)
+			{
+				c=dist[i];
+				u=i;
+			}
+		}
+		vis[u]=1;
+		for(i=1;i<=n;i++)
+		dist[i]=min(dist[i],(dist[u]+cost[u][i]));
+	}
 }
-while(count<n)
-{    min=999;
-for(i=1;i<=n;i++)
-for(j=1;j<=n;j++)
-if(cost[i][j]<min)
-{
-min=cost[i][j];
-a=u=i;
-b=v=j;
-}
-while(parent[u])
-u=parent[u];
-while(parent[v])
-v=parent[v];
-if(u!=v)
-{
-count++;
-printf("\n edge(%d,%d)=%d",a,b,min);
-mincost+=min;
-parent[v]=u;
-}
-cost[a][b]=cost[b][a]=999;
-}  /*End of While */
-printf("\n minimum cost=%d",mincost);
-}
+
+int min(int a,int b)

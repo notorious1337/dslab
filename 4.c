@@ -1,4 +1,4 @@
-//sjikstras
+//djikstras
 #include<stdio.h>
 int n,cost[10][10],dist[10];
 int min(int a,int b);
@@ -42,3 +42,24 @@ void shortestpath(int n,int s)
 }
 
 int min(int a,int b)
+{
+	if(a<b)
+		return a;
+	else
+		return b;
+}
+
+void main()
+{
+	int i,j,s;
+	printf("enter the num of vertices\n");
+	scanf("%d",&n);
+	printf("enter the costadjacency matrix(999 for no edge);\n");
+	read_mat(n);
+	printf("enter source vertex\n");
+	scanf("%d",&s);
+	shortestpath(n,s);
+	printf("the shortest path b/n vertex %d to",s);
+	for(i=1;i<=n;i++)
+		printf("vertex %d is %d\n",i,dist[i]);
+}

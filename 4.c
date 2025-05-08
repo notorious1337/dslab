@@ -1,3 +1,4 @@
+//sjikstras
 #include<stdio.h>
 int n,cost[10][10],dist[10];
 int min(int a,int b);

@@ -1,139 +1,57 @@
-#include<stdio.h>
-#include<string.h>
+//nqueens
 #include<stdlib.h>
-#define MAXADDR 100
-
-struct employee
+#include <stdio.h>
+int count=0,x[5];
+int nqueen(int,int);
+int main()
 {
-	int empid;	// 4-digit key to determine employee records uniquely
-	int age;
-	char name[20];
-}ht[MAXADDR];
-
-int hash(int key)	// Hash function to convert 4-digit key to 2-digit index (hash address)
-{
-	int index;
-	index = key % MAXADDR; 
-	return ( index );
+	int n;
+	printf("\n enter the number of queen");
+	scanf("%d",&n);
+	nqueen(1,n);
+	if(count==0)
+		printf("\n no solution found");
+	else
+		printf("\n number of solution found is:%d",count);
+	return 0;
 }
-void main( )
+
+int place(int k,int i)
 {
-	int i, choice, count, key, age, index;
-	char name[20];
+	int j;
+	for(j=1;j<k;j++)
+		if((x[j]==i)||(abs(x[j]-i)==abs(j-k)))
+	return 0;
+	return 1;
+}
 
-	count = 0;
-
-	// Initialize all the empid in hash table ht to -1
-	for( i=0; i<MAXADDR; i++)
+int nqueen(int k,int n)
+{
+	int i,j,p;
+	for(i=1;i<=n;i++)
 	{
-		ht[i].empid = -1;
-	}	
-
-	for( ; ; )
-	{
-		printf("1. Insert Record	2. Search Record	3.Exit\n");
-
-		printf("Enter your choice\n");
-		scanf("%d", &choice);
-
-		switch(choice)
+		if(place(k,i))
 		{
-
-			case 1: if(count==MAXADDR)
+			x[k]=i;
+			if(k==n)
+			{
+				count++;
+				printf("solution=%d",count);
+				printf("\n");
+for(j=1;j<=n;j++)
 				{
-					printf("No Space Available\n");
+					for(p=1;p<=n;p++)
+						if(x[j]==p)
+							printf("Q\t");
+						else
+							printf("0\t");
+							printf("\n");
 				}
-				else
-				{
-					printf("Enter the 4-digit unique key for employee\n");
-					scanf("%d", &key);
-
-					printf("Enter the Employee name\n");
-					scanf("%s",name);
-
-					printf("Enter the age\n");
-					scanf("%d", &age);
-										
-					index = hash(key);
-
-					if( ht[index].empid==-1) // Found free location (No Collision)
-					{
-						ht[index].empid = key;
-						strcpy(ht[index].name, name);
-						ht[index].age = age;
-						count = count + 1;
-						break;
-					}
-					else // Collision Resolution (Linear Probing)
-					{
-					    printf("Collision Detected!!!");
-					    printf("Collision will be avoided using Linear Probing");
-						for( i=1; i<MAXADDR; i++ )
-						{
-							index = ( hash(key) + i ) % MAXADDR;
-
-							if( ht[index].empid==-1) // Found free location 									{
-								ht[index].empid = key;
-								strcpy(ht[index].name, name);
-								ht[index].age = age;
-								count = count + 1;
-								break;
-							}
-						}
-					}
-				
-
-				break;
-
-			case 2: printf("Enter the 4-digit unique key of employee to search\n");
-				scanf("%d", &key);
-
-				index = hash(key);
-
-				if( ht[index].empid==key) // Found Successfully
-				{
-					printf("Successful Search\n");
-					printf("Name = %s\n", ht[index].name);
-					printf("Age = %d\n", ht[index].age);
-					
-					break;
-				}
-				else if( ht[index].empid==-1 ) // Found Vacant Position
-				{
-					printf("Unsuccessful Search\n");
-					printf("Key not found\n");
-					
-					break;
-				}
-				else // Search using Linear Probing
-				{
-					for( i=1; i<MAXADDR; i++ )
-					{
-						index = ( hash(key) + i ) % MAXADDR;
-						
-						if( ht[index].empid==key) // Found Successfully
-						{
-							printf("Successful Search\n");
-							printf("Name = %s\n", ht[index].name);
-							printf("Age = %d\n", ht[index].age);
-					
-							break;
-						}
-						else if( ht[index].empid==-1 ) // Found Vacant Position
-						{
-							printf("Unsuccessful Search\n");
-							printf("Key not found\n");
-					
-							break;
-						}
-					}
-				}
-
-				printf("Unsuccessful Search\n");
-				printf("Key not found\n");
-				break;
-
-			default: exit (0);
+				printf("\n");
+			}
+			else
+				nqueen(k+1,n);
 		}
 	}
+	return 0;
 }

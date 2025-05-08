@@ -1,42 +1,78 @@
-//topological
+//kanpsack using dp
 #include<stdio.h>
 #include<stdlib.h>
+#include<unistd.h>
 #include<math.h>
-int main()
+
+int  max(int,int);
+
+int v[10][10],w[10],p[10],x[10],count=0;
+int findobjects(int n,int m);
+void main()
 {
-int i,j,k,n,a[10][10],indeg[10],flag[10],count=0;
-printf("enter the number of vertices\n");
-scanf("%d",&n);
-printf("enter the adjacency matrix \n");
-for(i=0;i<n;i++)
-for(j=0;j<n;j++)
-scanf("%d",&a[i][j]);
-for(i=0;i<n;i++)
-{
-indeg[i]=0;
-flag[i]=0;
+	int m,n,i,j;
+	printf("enter the number of objects\n");
+	scanf("%d",&n);
+	printf("enter the capacity of knapsack\n");
+	scanf("%d",&m);
+	printf("enter the weights of the objects\n");
+	for(i=1;i<=n;i++)
+		scanf("%d",&w[i]);
+	printf("enter the profits\n");
+		for(i=1;i<=n;i++)
+			scanf("%d",&p[i]);
+	for(i=0;i<=n;i++)
+	{
+		for(j=0;j<=m;j++)
+		{
+			if(i==0||j==0)
+			v[i][j]=0;
+			else if(j<w[i])
+				v[i][j]=v[i-1][j];
+			else
+				v[i][j]=max(v[i-1][j],v[i-1][j-w[i]]+p[i]);
+		}
+	}
+	printf("the output is:\n");
+	for(i=0;i<=n;i++)
+	{
+		for(j=0;j<=m;j++)
+		{
+			printf("%d\t",v[i][j]);
+		}
+		printf("\n");
+	}
+printf("maximum profit is:%d\n",v[n][m]);
+	findobjects(n,m);
+	printf("objects included in knapsack \n");
+	for(i=1;i<=count;i++)
+		printf("%d\t",x[i]);
 }
-for(i=0;i<n;i++)
-for(j=0;j<n;j++)
-indeg[i]=indeg[i]+a[j][i];
-printf("topological order is \n");
-while(count<n)
+
+int max(int a,int b)
 {
-for(k=0;k<n;k++)
+	if(a>b)
+	return a;
+	else	
+	return b;
+	
+}
+
+
+int findobjects(int n,int m)
 {
-if((indeg[k]==0)&&(flag[k]==0))
-{
-printf("%d->",(k+1));
-flag[k]=1;
-for(i=0;i<n;i++)
-{
-if(a[k][i]==1)
-indeg[i]--;
-}
-}
-}
-count++;
-}
-printf("\n");
-return 0;
+	int i,j;
+	i=n;
+	j=m;
+	while(i!=0&&j!=0)
+	{
+		if(v[i][j]!=v[i-1][j])
+		{
+			x[++count]=i;
+			m=m-w[i];
+			j=m;
+		}
+		i--;
+	}
+	return 0;
 }

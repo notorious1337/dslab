@@ -1,178 +1,74 @@
+//knapsack using greedy
 #include<stdio.h>
-#include<stdlib.h>
-#include<string.h> 
-int count=0;
- 
-struct node
-{	
-	int sem,phno;
-	char name[20],branch[10],usn[20]; 
-	struct node *next;
-} *first=NULL,*last=NULL,*temp=NULL,*temp1; 
- 
-void create()
+void knapsack(int n, float weight[], float profit[], float capacity) 
 {
-	int sem,phno;
-	char name[20],branch[10],usn[20];
-	temp=(struct node*)malloc(sizeof(struct node));
-	printf("\n Enter usn,name, branch, sem, phno of student : "); 
-	scanf("%s %s %s %d %d", usn, name,branch, &sem,&phno); 
-	strcpy(temp->usn,usn);
-	strcpy(temp->name,name); 
-	strcpy(temp->branch,branch);
-	temp->sem = sem;
-	temp->phno = phno; 
-	temp->next=NULL; 
-	count++;
+   float x[20], tp = 0;
+   int i, j, u;
+   u = capacity;
+
+   for (i = 0; i < n; i++)
+      x[i] = 0.0;
+
+   for (i = 0; i < n; i++) {
+      if (weight[i] > u)
+         break;
+      else {
+         x[i] = 1.0;
+         tp = tp + profit[i];
+         u = u - weight[i];
+      }
+   }
+
+   if (i < n)
+      x[i] = u / weight[i];
+
+   tp = tp + (x[i] * profit[i]);
+
+   printf("\nThe result vector is:- ");
+   for (i = 0; i < n; i++)
+      printf("%f\t", x[i]);
+
+   printf("\nMaximum profit is:- %f", tp);
+
 }
- 
-void insert_atfirst()
-{
-	if (first == NULL)
-	{
-		create();
-		first = temp;
-		last = first;
-	}
-	else
-	{
-		create(); 
-		temp->next = first; 
-		first = temp;
-	}
- 
+
+int main() {
+   float weight[20], profit[20], capacity;
+   int num, i, j;
+   float ratio[20], temp;
+
+   printf("\nEnter the no. of objects:- ");
+   scanf("%d", &num);
+
+   printf("\nEnter the wts and profits of each object:- ");
+   for (i = 0; i < num; i++) {
+scanf("%f %f", &weight[i], &profit[i]);
+   }
+
+   printf("\nEnter the capacity of knapsack:- ");
+   scanf("%f", &capacity);
+
+   for (i = 0; i < num; i++) {
+      ratio[i] = profit[i] / weight[i];
+   }
+
+   for (i = 0; i < num; i++) {
+      for (j = i + 1; j < num; j++) {
+         if (ratio[i] < ratio[j]) {
+            temp = ratio[j];
+            ratio[j] = ratio[i];
+            ratio[i] = temp;
+
+            temp = weight[j];
+            weight[j] = weight[i];
+            weight[i] = temp;
+
+            temp = profit[j];
+            profit[j] = profit[i];
+            profit[i] = temp;
+         }
+      }
+   }
+   knapsack(num, weight, profit, capacity);
+   return(0);
 }
- 
-void insert_atlast()
-{
-	if(first==NULL)
-	{
-		create();
-		first = temp; 
-		last = first;
-	}
-	else
-	{
-		create(); 
-		last->next = temp;
-		last = temp;
-	}
- 
-}
- 
-void display()
-{
-	temp1=first;
-	if(temp1 == NULL)
-	{
-		printf("List empty to display \n"); 
-		return;
-	}
-	printf("\n Linked list elements from begining : \n"); 
-	while (temp1!= NULL)
-	{
-		printf("%s %s %s %d %d\n", temp1->usn, temp1->name,temp1->branch,
-		temp1->sem,temp1->phno );
-		temp1 = temp1->next;
-	}
-	printf(" No of students = %d ", count);
-}
- 
-int deleteend()
-{
-	struct node *temp; 
-	temp=first; 
-	if(temp->next==NULL)
-	{
-		printf("%s %s %s %d %d\n", temp->usn, temp ->name, temp ->branch, temp ->sem,
-		 	temp ->phno );
-free(temp);
-		first=NULL;
-	}
-	else
-	{
-		while(temp->next!=last) 
-			temp=temp->next;
-		printf("%s %s %s %d %d\n", last->usn, last->name,last->branch, last->sem,
-		 	last->phno );
-		free(last);
-		temp->next=NULL; 
-		last=temp;
-	}
-	count--; 
-	return 0;
- 
-}
- 
-int deletefront()
-{
-	struct node *temp; 
-	temp=first;
-	if(temp->next==NULL)
-	{
-		free(temp);
-		printf("%s %s %s %d %d", temp->usn, temp->name,temp->branch,temp->sem, 				temp->phno );
-		first=NULL; 
-		return 0;
-	}
-	else
-	{
-		first=temp->next;
-		printf("%s %s %s %d %d", temp->usn, temp->name,temp->branch,temp->sem, 				temp->phno );
-		free(temp);
-	}
-	count--; 
-	return 0;
- 
-}
- 
-void main()
-{
-	int ch,n,i; 
-	first=NULL;
-	temp = temp1 = NULL; 
-	printf("-----------------MENU----------------------\n");
-	printf("\n 1- create a SLL of n STUDENT");
-	printf("\n 2 - Display from beginning"); 
-	printf("\n 3 - Insert at end");
-	printf("\n 4 - delete at end");
-	printf("\n 5 - Insert at beg");
-	printf("\n 6 - delete at beg"); 
-	printf("\n 7 - exit\n");
-	printf("-------------------------------------------\n"); 
-	while (1)
-	{
-		printf("\n Enter choice : "); 
-		scanf("%d", &ch);
-		switch (ch)
-		{
-			case 1:
-				printf("\n Enter no of students : "); 
-				scanf("%d", &n); 
-				for(i=0;i<n;i++)
-					insert_atfirst();
-				break;
-			case 2: 
-				display();
-				break; 
-			case 3:
-				insert_atlast(); 
-				break;
-			case 4:
-				deleteend();
-				break;
-			case 5: 
-				insert_atfirst();
-				break;
-			case 6: 
-				deletefront();
-				break;
-			case 7:
-				exit(0);
-			default: 
-				printf("wrong choice\n");
-			}
-	}
-}
- 
- 
